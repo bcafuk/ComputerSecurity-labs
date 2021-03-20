@@ -1,0 +1,19 @@
+{
+  "name": "srs-lab1",
+  "version": "1.0.0",
+  "description": "A solution to the first lab assignment for Computer Security at FER at UniZG in the academic year 2020/2021",
+  "main": "pwman.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Borna Cafuk",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "inquirer": "^8.0.0"
+  }
+}
