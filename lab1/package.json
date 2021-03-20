@@ -4,7 +4,7 @@
   "description": "A solution to the first lab assignment for Computer Security at FER at UniZG in the academic year 2020/2021",
   "main": "pwman.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "prettier": "prettier --write ."
   },
   "keywords": [],
   "author": "Borna Cafuk",
