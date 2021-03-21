@@ -11,7 +11,7 @@
  * JMBAG (matriculation number): 0036513396
  */
 const fsPromises = require("fs/promises");
-const inquirer = require("inquirer");
+const prompts = require("prompts");
 const PasswordStore = require("./PasswordStore");
 
 const STORE_FILENAME = "store.pwmanjs";
@@ -29,7 +29,7 @@ const USAGE = `usage:
         and prints the stored site password for the given address.`;
 
 const masterPasswordPrompt = {
-  type: "password",
+  type: "invisible",
   name: "masterPassword",
   message: "Master password",
 };
@@ -41,7 +41,7 @@ function exit(code, reason) {
 
 async function init() {
   const file = await fsPromises.open(STORE_FILENAME, "wx", 0o600);
-  const { masterPassword } = await inquirer.prompt(masterPasswordPrompt);
+  const { masterPassword } = await prompts(masterPasswordPrompt);
 
   const store = new PasswordStore();
   await store.write(file, masterPassword);
@@ -49,7 +49,7 @@ async function init() {
 
 async function get(address) {
   const file = await fsPromises.open(STORE_FILENAME, "r");
-  const { masterPassword } = await inquirer.prompt(masterPasswordPrompt);
+  const { masterPassword } = await prompts(masterPasswordPrompt);
 
   const store = await PasswordStore.read(file, masterPassword);
   return store.get(address);
@@ -57,12 +57,12 @@ async function get(address) {
 
 async function put(address) {
   const file = await fsPromises.open(STORE_FILENAME, "r+");
-  const { masterPassword } = await inquirer.prompt(masterPasswordPrompt);
+  const { masterPassword } = await prompts(masterPasswordPrompt);
 
   const store = await PasswordStore.read(file, masterPassword);
 
-  const { sitePassword } = await inquirer.prompt({
-    type: "password",
+  const { sitePassword } = await prompts({
+    type: "invisible",
     name: "sitePassword",
     message: `Site password for ${address}`,
   });
