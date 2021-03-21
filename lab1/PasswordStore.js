@@ -1,3 +1,15 @@
+/*
+ * pwman.js
+ *
+ * A simple password manager.
+ *
+ * Made for the first laboratory assignment for the course Computer Security
+ * at the Faculty of Electrical Engineering and Computing
+ * at the University of Zagreb, Croatia in the academic year 2020/2021.
+ *
+ * © 2021 Borna Cafuk, All rights reserved
+ * JMBAG (matriculation number): 0036513396
+ */
 const { promisify } = require("util");
 const crypto = require("crypto");
 
