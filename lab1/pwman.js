@@ -11,6 +11,7 @@
  * JMBAG (matriculation number): 0036513396
  */
 const inquirer = require("inquirer");
+const PasswordStore = require("./PasswordStore");
 
 const usage = `usage:
     node pwman.js init
@@ -36,13 +37,40 @@ function exit(code, reason) {
   process.exit(code);
 }
 
+async function init(masterPassword) {
+  // TODO: Creating file
+  const file = null;
+
+  const store = await PasswordStore.initialize(masterPassword);
+  await store.write(file, masterPassword);
+}
+
+async function get(masterPassword, address) {
+  // TODO: Opening file
+  const file = null;
+
+  const store = await PasswordStore.read(file, masterPassword);
+  return store.get(address);
+}
+
+async function put(masterPassword, address, sitePassword) {
+  // TODO: Opening file
+  const file = null;
+
+  const store = await PasswordStore.read(file, masterPassword);
+  store.put(address, sitePassword);
+  await store.write(file, masterPassword);
+}
+
 const [command, address] = process.argv.slice(2);
 
 switch (command) {
   case "init":
-    inquirer.prompt(masterPasswordPrompt).then((answers) => {
-      const { masterPassword } = answers;
-    });
+    inquirer
+      .prompt(masterPasswordPrompt)
+      .then(({ masterPassword }) => init(masterPassword))
+      .then(() => console.log("Password manager initialized."))
+      .catch((reason) => exit(2, reason.message));
 
     break;
 
@@ -58,18 +86,24 @@ switch (command) {
           message: `Site password for ${address}`,
         },
       ])
-      .then((answers) => {
-        const { masterPassword, sitePassword } = answers;
-      });
+      .then(({ masterPassword, sitePassword }) =>
+        put(masterPassword, address, sitePassword)
+      )
+      .then(() => console.log(`Stored password for ${address}`))
+      .catch((reason) => exit(2, reason.message));
 
     break;
 
   case "get":
     if (!address) exit(1, usage);
 
-    inquirer.prompt(masterPasswordPrompt).then((answers) => {
-      const { masterPassword } = answers;
-    });
+    inquirer
+      .prompt(masterPasswordPrompt)
+      .then(({ masterPassword }) => get(masterPassword, address))
+      .then((sitePassword) =>
+        console.log(`The password for ${address} is ${sitePassword}`)
+      )
+      .catch((reason) => exit(2, reason.message));
 
     break;
 
