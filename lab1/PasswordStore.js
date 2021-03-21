@@ -3,19 +3,20 @@ const crypto = require("crypto");
 
 const DERIVE_HASH_ALGORITHM = "sha256";
 const SALT_SIZE = 32;
+const KEY_ITERATIONS = 100000;
 const KEY_LENGTH = 32;
 
 const DIGEST_ALGORITHM = "sha256";
 const DIGEST_SIZE = 256 / 8;
 
 const CIPHER_ALGORITHM = "aes-256-cbc";
-const IV_SIZE = 256 / 8;
+const IV_SIZE = 128 / 8;
 
 function deriveKey(password, salt) {
   return util.promisify(crypto.pbkdf2)(
     Buffer.from(password, "ascii"),
     salt,
-    100000,
+    KEY_ITERATIONS,
     KEY_LENGTH,
     DERIVE_HASH_ALGORITHM
   );

@@ -13,7 +13,8 @@
 const inquirer = require("inquirer");
 const PasswordStore = require("./PasswordStore");
 
-const usage = `usage:
+const STORE_FILENAME = "store.pwmanjs";
+const USAGE = `usage:
     node pwman.js init
         Prompts for the master password, and
         creates an empty store in the current directory.
@@ -75,7 +76,7 @@ switch (command) {
     break;
 
   case "put":
-    if (!address) exit(1, usage);
+    if (!address) exit(1, USAGE);
 
     inquirer
       .prompt([
@@ -95,7 +96,7 @@ switch (command) {
     break;
 
   case "get":
-    if (!address) exit(1, usage);
+    if (!address) exit(1, USAGE);
 
     inquirer
       .prompt(masterPasswordPrompt)
@@ -109,5 +110,5 @@ switch (command) {
 
   case undefined:
   default:
-    exit(1, usage);
+    exit(1, USAGE);
 }
