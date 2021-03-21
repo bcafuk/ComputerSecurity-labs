@@ -39,24 +39,34 @@ function exit(code, reason) {
   process.exit(code);
 }
 
-async function init(masterPassword) {
+async function init() {
   const file = await fsPromises.open(STORE_FILENAME, "wx", 0o600);
+  const { masterPassword } = await inquirer.prompt(masterPasswordPrompt);
 
   const store = new PasswordStore();
   await store.write(file, masterPassword);
 }
 
-async function get(masterPassword, address) {
+async function get(address) {
   const file = await fsPromises.open(STORE_FILENAME, "r");
+  const { masterPassword } = await inquirer.prompt(masterPasswordPrompt);
 
   const store = await PasswordStore.read(file, masterPassword);
   return store.get(address);
 }
 
-async function put(masterPassword, address, sitePassword) {
+async function put(address) {
   const file = await fsPromises.open(STORE_FILENAME, "r+");
+  const { masterPassword } = await inquirer.prompt(masterPasswordPrompt);
 
   const store = await PasswordStore.read(file, masterPassword);
+
+  const { sitePassword } = await inquirer.prompt({
+    type: "password",
+    name: "sitePassword",
+    message: `Site password for ${address}`,
+  });
+
   store.put(address, sitePassword);
   await store.write(file, masterPassword);
 }
@@ -65,9 +75,7 @@ const [command, address] = process.argv.slice(2);
 
 switch (command) {
   case "init":
-    inquirer
-      .prompt(masterPasswordPrompt)
-      .then(({ masterPassword }) => init(masterPassword))
+    init()
       .then(() => console.log("Password manager initialized."))
       .catch((reason) => exit(2, reason.message));
 
@@ -76,18 +84,7 @@ switch (command) {
   case "put":
     if (!address) exit(1, USAGE);
 
-    inquirer
-      .prompt([
-        masterPasswordPrompt,
-        {
-          type: "password",
-          name: "sitePassword",
-          message: `Site password for ${address}`,
-        },
-      ])
-      .then(({ masterPassword, sitePassword }) =>
-        put(masterPassword, address, sitePassword)
-      )
+    put(address)
       .then(() => console.log(`Stored password for ${address}`))
       .catch((reason) => exit(2, reason.message));
 
@@ -96,9 +93,7 @@ switch (command) {
   case "get":
     if (!address) exit(1, USAGE);
 
-    inquirer
-      .prompt(masterPasswordPrompt)
-      .then(({ masterPassword }) => get(masterPassword, address))
+    get(address)
       .then((sitePassword) =>
         console.log(`The password for ${address} is ${sitePassword}`)
       )
