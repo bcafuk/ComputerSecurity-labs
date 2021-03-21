@@ -10,6 +10,7 @@
  * © 2021 Borna Cafuk, All rights reserved
  * JMBAG (matriculation number): 0036513396
  */
+const fsPromises = require("fs/promises");
 const inquirer = require("inquirer");
 const PasswordStore = require("./PasswordStore");
 
@@ -39,24 +40,21 @@ function exit(code, reason) {
 }
 
 async function init(masterPassword) {
-  // TODO: Creating file
-  const file = null;
+  const file = await fsPromises.open(STORE_FILENAME, "wx", 0o600);
 
-  const store = await PasswordStore.initialize(masterPassword);
+  const store = new PasswordStore();
   await store.write(file, masterPassword);
 }
 
 async function get(masterPassword, address) {
-  // TODO: Opening file
-  const file = null;
+  const file = await fsPromises.open(STORE_FILENAME, "r");
 
   const store = await PasswordStore.read(file, masterPassword);
   return store.get(address);
 }
 
 async function put(masterPassword, address, sitePassword) {
-  // TODO: Opening file
-  const file = null;
+  const file = await fsPromises.open(STORE_FILENAME, "r+");
 
   const store = await PasswordStore.read(file, masterPassword);
   store.put(address, sitePassword);
