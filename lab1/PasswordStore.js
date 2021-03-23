@@ -42,8 +42,8 @@ async function deriveKeys(salt, masterPassword) {
   );
 
   return {
-    digestKey: key.subarray(0, CIPHER_KEY_LENGTH),
-    cipherKey: key.subarray(CIPHER_KEY_LENGTH),
+    digestKey: key.subarray(0, DIGEST_KEY_LENGTH),
+    cipherKey: key.subarray(DIGEST_KEY_LENGTH),
   };
 }
 
