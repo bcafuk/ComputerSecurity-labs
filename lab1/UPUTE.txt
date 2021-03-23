@@ -1,0 +1,20 @@
+PREDUVJETI:
+pwman.js zahtijeva Node.js, inačicu 14.0.0 ili noviju.
+
+INSTALACIJA:
+U korijenskom direktoriju projekta (onome koji sadrži datoteku package.json)
+treba pokrenuti naredbu `npm install --production` kako bi se instalirali
+potrebni paketi.
+
+KORIŠTENJE:
+Kako bi se inicijalizirala datoteka za pohranu, treba pokrenuti naredbu
+`node pwman.js init`, na što će program zatražiti unos glavne zaporke.
+
+Zaporka se dodaje za neku danu adresu naredbom `node pwman.js put <adresa>`.
+Program će zatražiti unos glavne zaporke, te ako je ona ispravna će zatražiti
+i unos nove zaporke za predanu adresu. Ako je za adresu već pohranjena zaporka,
+stara zaporka će biti zamijenjena novom.
+
+Dohvaćanje zaporke se vrši naredbom `node pwman.js get <adresa>`. Program će
+zatražiti unos glavne zaporke, te ako je ona ispravna će ispisati prethodno
+pohranjenu zaporku za predanu adresu.

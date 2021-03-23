@@ -1,0 +1,57 @@
+OPIS NAČINA RADA PROGRAMA
+
+Tijekom rada programa se u memoriji zaporke čuvaju u JavaScriptovoj
+asocijativnoj mapi (Map), s adresama kao ključevima i zaporkama kao
+vrijednostima.
+
+Za čitanje s i pisanje na disk se mapa reprezentira u JSON formatu. Taj JSON
+predstavlja ugniježđena JavaScript polja (arrays), npr.
+    [["fer.unizg.hr","zAporka1"],["sczg.unizg.hr","zaPoRka2"]]
+
+Ovakav oblik je prirodni oblik Mape pri pretvorbi u JSON i iz JSON-a jer
+konstruktor Mape prima takvu strukturu, te funkcija JSON.stringify vraća takav
+oblik pri pozivu nad Mapom.
+
+Takav JSON predstavlja izvorni tekst koji se kriptira algoritmom AES-256 u CBC
+načinu rada. Pri svakom kriptiranju se inicijalizacijski vektor iznova dobiva
+funkcijom koja generira kriptografski sigurne brojeve.
+
+Zatim se od inicijalizacijskog vektora i šifrata računa kod za integritet
+poruke HMAC-om koristeći funkciju sažetka SHA-256. Pri čitanju se korištenjem
+upisane zaporke i "salta" iz datoteke ponovno računa kod iz podataka u
+datoteci. Zatim se podudarnost tako izračunatog koda i onog zapisanog u
+datoteci utvrđuje funkcijom koja je vremenski sigurna, tj. koristi algoritam
+kojem uvijek treba jednako vremena neovisno o ulaznim podatcima.
+
+Za dobivanje kriptografskih ključeva se koristi funkcija PBKDF2, pritom
+koristeći 100000 iteracija funkcije SHA-256. Kod derivacije ključa se koristi
+"salt" od 32 okteta dobiven funkcijom koja generira kriptografski sigurne
+brojeve. "Salt" se iznova računa pri svakom pisanju u datoteku kako bi se
+kriptografski ključevi često mijenjali. PBKDF2 se poziva nad glavnom zaporkom i
+generiraju se 64 okteta materijala za ključeve. Prva 32 okteta se koriste kao
+ključ pri računanju koda za integritet poruke, a druga 32 okteta se koriste kao
+ključ za kriptiranje.
+
+U datoteku na disku se pohranjuju redom:
+- zaglavlje s identifikatorom i inačicom formata (trenutno 1),
+- 32-oktetni "salt,"
+- 32-oktetni kod za zaštitu integriteta,
+- 16-oktetni inicijalizacijski vektor, te
+- šifrat.
+
+Takvim pristupom su zadovoljeni sigurnosni zahtjevi:
+- Povjerljivost zaporki: Korišten je AES algoritam u CBC načinu rada. Kako
+  svaki 16-oktetni blok ovisi o prethodnom, nije moguće iz šifrata pročitati
+  gdje jedna zaporka počinje, a druga završava. Time napadač ne zna niti
+  sadržaj, niti duljine zaporki, samo može saznati ukupnu količinu podataka u
+  datoteci. Zato što blokovi ovise jedni o drugima, jednake zaporke u izvornom
+  tekstu u šifratu neće biti jednake. Kako se inicijalizacijski vektor i "salt"
+  mijenjaju pri svakoj pohrani na disk (iz promjene "salta" slijedi i promjena
+  ključa), pri promjeni neke of zaporki neće biti vidljivo je li nova zaporka
+  jednaka staroj.
+- Povjerljivost adresa: Vrijede isti argumenti kao i za povjerljivost zaporki.
+  Iako je dopušteno da napadač zna broj različitih adresa u bazi, ovakvim
+  pristupom čak ni to ne zna.
+- Integritet adresa i zaporki: Napadač bez ključa ne može mijenjati sadržaj baze
+  zaporki, jer time kod za integritet koji je zapisan u datoteci neće odgovarati
+  izmijenjenom inicijalizacijskom vektoru i šifratu.
