@@ -1,0 +1,21 @@
+{
+  "name": "srs-lab2",
+  "version": "1.0.0",
+  "description": "A solution to the second lab assignment for Computer Security at FER at UniZG in the academic year 2020/2021",
+  "scripts": {
+    "prettier": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "Borna Cafuk",
+  "license": "UNLICENSED",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^2.2.1"
+  },
+  "dependencies": {
+    "prompts": "^2.4.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}
