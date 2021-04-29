@@ -12,8 +12,6 @@
 const { promisify } = require("util");
 const crypto = require("crypto");
 
-const STORE_FILENAME = "usermgmt.json";
-
 const FORMAT_IDENTIFIER = "usermgmt";
 const VERSION = 1;
 
@@ -150,7 +148,4 @@ class HashStore {
   }
 }
 
-module.exports = {
-  HashStore,
-  STORE_FILENAME,
-};
+module.exports = HashStore;
