@@ -23,13 +23,13 @@ function validatePassword(password) {
     return "The password must be at least 8 characters long";
 
   if (password.search(LOWERCASE_REGEX) === -1)
-    return "The password must be at 1 lowercase letter";
+    return "The password must have at 1 lowercase letter";
 
   if (password.search(UPPERCASE_REGEX) === -1)
-    return "The password must be at 1 uppercase letter";
+    return "The password must have at 1 uppercase letter";
 
   if (password.search(DIGIT_REGEX) === -1)
-    return "The password must be at 1 digit";
+    return "The password must have at 1 digit";
 
   return true;
 }
