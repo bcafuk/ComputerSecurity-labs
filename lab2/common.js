@@ -12,7 +12,8 @@
 const STORE_FILENAME = "usermgmt.json";
 
 const PASSWORD_REQUIREMENTS =
-  "The password must be at least 8 characters long and must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit.";
+  "The password must be at least 8 characters long and must contain at least 1 lowercase letter, 1 uppercase letter and 1 digit.\n" +
+  "You cannot use a password you have used previously";
 
 const LOWERCASE_REGEX = /[a-z]/;
 const UPPERCASE_REGEX = /[A-Z]/;
