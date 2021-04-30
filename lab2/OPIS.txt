@@ -1,0 +1,51 @@
+OPIS NAČINA RADA PROGRAMA
+
+Program uz svako korisničko ime u bazi veže:
+  1. "salt" korišten pri izračunu sažetka trenutne zaporke,
+  2. scrypt sažetak "salta" i trenutne zaporke,
+  3. "saltove" i scrypt sažetke svih dosadašnjih zaporki, te
+  4. je li administrator zatražio promjenu zaporke za korisnika.
+
+Ti podaci se na disk zapisuju u datoteku JSON formata, gdje su "saltovi" i
+sažetci kodirani u string koristeći base64.
+
+Datoteka dodatno sadrži identifikator formata i oznaku inačice formata.
+
+Pri unosu novog korisnika ili promjene zaporke postojećeg se "salt" iznova
+generira funkcijom za kriptografski sigurne brojeve. Takav salt od 32 okteta
+se zajedno sa zaporkom prosljeđuje funkciji scrypt, koja generira sažetak od
+64 okteta.
+
+Za provjeru ispravnosti zaporke pri prijavi korisnika se funkcijom scrypt
+računa sažetak iz zaporke koju je korisnik unio i "salta" pohranjenog u bazi.
+Zatim se taj sažetak uspoređuje s onim pohranjenim u bazi, i ukoliko su jednaki
+se prijava odobrava.
+
+Korištene zaštite:
+- Pohrana sažetka umjesto čiste zaporke: napadač krađom datoteke s bazom
+  korisničkih računa ne može iz nje jednostavno pročitati zaporke.
+- Korištenje "salta" pri računanju sažetaka zaporki: čak i ako više korisnika
+  koristi jednaku zaporku, imat će različite sažetke i napadač neće moći lako
+  prepoznati koji korisnici koriste istu zaporku. Dodatno, ne može koristiti
+  "rainbow tables" za razbijanje zaporki.
+- Minimalna kompleksnost zaporki: drastično povećava skup lozinki koji napadač
+  mora pretražiti kod napada grubom silom.
+- Mogućnost forsiranja promjene zaporke: Ako saznamo da je zaporka
+  kompromitirana, moguće je odmah forsirati zamjenu zaporke i tu zaporku
+  napadaču učiniti beskorisnom. Promjena zaporke smanjuje prozor u kojem
+  napadač može koristiti kompromitiranu zaporku za koju ne znamo da je
+  kompromitirana.
+- Zabrana ponovnog korištenja starih zaporki: ako je neka od prethodnih zaporki
+  kompromitirana, nema veze jer ju taj korisnik nikada više neće moći
+  koristiti.
+
+Zaštite koje nisu korištene:
+- Čekanje nakon upisane neispravne lozinke: nema puno smisla jer je datoteka sa
+  sažetcima na istom računalu na kojem se korisnik prijavljuje, te korisnik ima
+  kontrolu nad sustavskim satom.
+- Blokiranje računa nakon nekoliko neispravnih pokušaja prijave: datoteka sa
+  sažetcima se nalazi na istom računalu na kojem se korisnik prijavljuje, te ne
+  postoji infrastruktura za obavještavanje administratora o blokiranom računu.
+- Periodička promjena zaporki: nije automatizirana jer zahtjeva nešto kao
+  "cronjob", no administrator može periodički ručno zatražiti promjenu zaporki.
+- Izazov-odgovor način provjere: zaporka se ne prenosi preko mreže.
