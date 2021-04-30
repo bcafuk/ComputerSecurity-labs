@@ -51,6 +51,10 @@ class UserEntry {
 class HashStore {
   #userEntries = new Map();
 
+  containsUser(username) {
+    return this.#userEntries.has(username);
+  }
+
   async put(username, password) {
     const salt = await randomBytes(SALT_SIZE);
     const entry = new UserEntry(salt, await hashPassword(salt, password));
