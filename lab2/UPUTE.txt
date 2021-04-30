@@ -1,0 +1,25 @@
+PREDUVJETI:
+usermgmt.js i login.js zahtijevaju Node.js, inačicu 14.0.0 ili noviju.
+
+INSTALACIJA:
+U korijenskom direktoriju projekta (onome koji sadrži datoteku package.json)
+treba pokrenuti naredbu `npm install --production` kako bi se instalirali
+potrebni paketi.
+
+KORIŠTENJE ALATA usermgmt.js:
+Novog korisnika se može dodati naredbom `node usermgmt.js add <korisnickoIme>`,
+na što će program zatražiti unos i potvrdu zaporke.
+
+Korisnika se može obrisati naredbom `node usermgmt.js del <korisnickoIme>`.
+
+Administrator može promijeniti zaporku bilo kojeg korisnika naredbom
+`node usermgmt.js passwd <korisnickoIme>`, koja će zatražiti unos i potvrdu
+zaporke.
+
+Administrator može zatražiti od korisnika da promijeni svoju zaporku pri
+sljedećoj prijavi naredbom `node usermgmt.js forcepass <korisnickoIme>`.
+
+KORIŠTENJE ALATA login.js:
+Korisnik se može prijaviti u sustav naredbom `node login.js <korisnickoIme>`.
+Ako je administrator postavio da korisnik mora promijeniti zaporku, nakon unosa
+ispravne zaporke će biti potrebno unijeti i potvrditi novu zaporku.
