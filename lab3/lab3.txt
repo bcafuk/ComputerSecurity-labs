@@ -49,12 +49,12 @@ U obrazac na stranici „SQL Injection” sam upisao
 Time nisam dobio niti jedan rezultat iz prvog upita, a drugi upit mi je dao
 popis imena korisnika i sažetaka njihovih lozinki.  Ime korisnika je u
 rezultatu u prvom stupcu, pa se na stranici pojavilo pod „First name”, a
-sažetak loninke je u drugom stupcu, pa je bio naveden kao „Surname”.  Zatim sam
+sažetak lozinke je u drugom stupcu, pa je bio naveden kao „Surname”.  Zatim sam
 našao korisnika pod imenom „PabloPicasso” i kopirao odgovarajući sažetak
 lozinke: „0d107d09f5bbe40cade3de5c71e9e9b7”.
 
 Konačno sam iz sažetka pomoću alata https://crackstation.net/ došao do
-korisnikove loznike, koja je „letmein”.
+korisnikove lozinke, koja je „letmein”.
 
 
 +------------------------------------------+
@@ -63,10 +63,10 @@ korisnikove loznike, koja je „letmein”.
 
 Otvorio sam stranicu „XSS (Stored)”.  U polje poruke sam upisao
 „<script>alert(document.cookie)</script>”.  Time sam na ekranu dobio skočni
-prozor sa svojim kolačićima. Među njima je i traženi:
+prozor sa svojim kolačićima.  Među njima je i traženi:
 PHPSESSID=82pfcbjf5ddrgujl9077suq614
 
-Korištenjem alata „Inpect” u pregledniku sam elementu <textarea> uklonio
+Korištenjem alata „Inspect” u pregledniku sam elementu <textarea> uklonio
 atribut „maxlength”, te sam si time omogućio slanje poruke dulje od 50
 znakova.  Za slanje kolačića kao parametra u GET zahtjevu sam koristio skriptu:
 
@@ -101,8 +101,8 @@ datoteke.  Tom opcijom bih PHP-u naredio da odbija otvoriti datoteku izvan
 direktorija u kojem se nalazi izvorni kod aplikacije.
 
 Najbolje rješenje za ovaj napad je ipak onemogućiti da klijenti mogu zadavati
-imena datoteka koje će se izvršavati.  Ukoliko je potrebna slična
-funkcionalnost, moguće je izmijeniti implementaciju da klijent kao parametar
-umjesto imena datoteke prosljeđuje jednu od unaprijed određenih konstanti.
-Poslužitelj bi zatim na temelju tog parametra iz unaprijed definiranog popisa
-PHP datoteka birao koju od njih uključiti.
+imena datoteka koje će se izvršavati.  Ako je potrebna slična funkcionalnost,
+moguće je izmijeniti implementaciju da klijent kao parametar umjesto imena
+datoteke prosljeđuje jednu od unaprijed određenih konstanti. Poslužitelj bi
+zatim na temelju tog parametra iz unaprijed definiranog popisa PHP datoteka
+birao koju od njih uključiti.
