@@ -37,3 +37,21 @@ gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologi
 nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
 _apt:x:100:65534::/nonexistent:/bin/false
 mysql:x:101:101:MySQL Server,,,:/nonexistent:/bin/false
+
+
++------------------------------------------+
+| 2) Napadi SQL umetanjem (SQL injection)  |
++------------------------------------------+
+
+U obrazac na stranici „SQL Injection” sam upisao
+„' union select concat(first_name, last_name), password from users #”.
+
+Time nisam dobio niti jedan rezultat iz prvog upita, a drugi upit mi je dao
+popis imena korisnika i sažetaka njihovih lozinki.  Ime korisnika je u
+rezultatu u prvom stupcu, pa se na stranici pojavilo pod „First name”, a
+sažetak loninke je u drugom stupcu, pa je bio naveden kao „Surname”.  Zatim sam
+našao korisnika pod imenom „PabloPicasso” i kopirao odgovarajući sažetak
+lozinke: „0d107d09f5bbe40cade3de5c71e9e9b7”.
+
+Konačno sam iz sažetka pomoću alata https://crackstation.net/ došao do
+korisnikove loznike, koja je „letmein”.
