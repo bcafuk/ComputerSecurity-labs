@@ -2,3 +2,12 @@ ping 192.168.56.101
 ping mail.fer.hr
 ping 161.53.19.1
 ping imunes.net
+
+nmap -sT -v 192.168.56.101
+nmap -sU -v -T5 192.168.56.101
+nmap -sS -v 192.168.56.101
+nmap -O -v 192.168.56.101
+nmap -sV -v 192.168.56.101
+nmap -A -v 192.168.56.101
+nmap -sV 192.168.56.101
+nmap -sV localhost

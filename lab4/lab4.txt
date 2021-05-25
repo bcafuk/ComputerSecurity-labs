@@ -46,3 +46,42 @@ pretjerano siguran u to jer navode i druge sustave s tom vrijednošću, ali mi s
 Pomoću ove vrijednosti ne mogu sa stopostotnom sigurnošću utvrditi o kojem je
 operacijskom sustavu riječ jer više sustava ima istu „defaultnu” vrijednost, a
 moguće je i da je ona naknadno konfigurirana na nekima od navedenih računala.
+
+
++---------------------------+
+| 2) Skeniranje alatom nmap |
++---------------------------+
+
+TCP connect scan na virtualnom stroju nije prouzročio vidljivu promjenu ispisa.
+Nmap je u potpunosti uspostavio TCP vezu („three-way handshake”), pa ju
+raskinuo.  Nakon što je zatvorena, veza više nije vidljiva u alatu netstat.
+Zato što je veza uspostavljena i raskinuta unutar 0,5 s se uopće nije pojavila
+u netstatu.
+
+Skeniranje UDP portova nije prouzročilo nikakvu promjenu u ispisu.  Na
+poslužitelju ne postoje procesi koji slušaju na UDP-u, pa se nije imalo što
+pojaviti.
+
+TCP syn scan je prouzročio pojavu nove TCP priključnice na vratima 22 (SSH) u
+stanju SYN_RECV.  Nmap je poslao SYN segment, ali nije odgovorio na
+poslužiteljev SYN/ACK.  Kako veza nije u potpunosti uspostavljena, priključnica
+je ostala vidljiva u netstatu dok nije istekla njena vremenska kontrola.
+
+Detekcija operacijskog sustava je u ispisu stvorila desetak SSH priključnica u
+stanju SYN_RECV.  Pretpostavljam da je to zbog toga što je Nmap trebao otvoriti
+više veza kako bi vidio ponašanje operacijskog sustava u ovisnosti o npr.
+veličini TCP prozora i sl.  Nmap je uspješno operacijski sustav Linux 5.0.0
+identificirao kao „Linux 4.X|5.X”.
+
+Detekcija verzija servisa je u ispisu stvorila jednu SSH priključnicu u stanju
+SYN_RECV.  Nmap je ispravno identificirao inačicu SSH poslužitelja kao OpenSSH
+7.6p1.
+
+Općeniti scan je imao kombinirani učinak identifikacije operacijskog sustava i
+verzija servisa, te je dodatno stvorio priključnice u stanju TIME_WAIT, odnosno
+priključnice koje je poslužitelj zatvorio, ali koje još čekaju za slučaj da
+neki paketi kasne.
+
+Pri skeniranju verzija servisa iznutra i izvana nema razlika.  To je zbog toga
+što na poslužitelju ne postoje neki procesi koji su dostupni samo lokalno, već
+samo SSH usluga koja je dostupna i izvana.
