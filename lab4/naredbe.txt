@@ -1,0 +1,4 @@
+ping 192.168.56.101
+ping mail.fer.hr
+ping 161.53.19.1
+ping imunes.net

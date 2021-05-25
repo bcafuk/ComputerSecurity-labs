@@ -4,3 +4,45 @@
                        +-------------------------------+
                        |          Borna Cafuk          |
                        +===============================+
+
+
++---------------------------+
+| 1) Skeniranje alatom ping |
++---------------------------+
+
+Povratne TTL vrijednosti su sljedeće:
+ *  64 za virtualni stroj,
+ * 116 za mail.fer.hr,
+ * 244 za 161.53.19.1, te
+ *  52 za imunes.net.
+
+Pretpostavit ću da su početne vrijednosti TTL vrijednosti potencije broja dva,
+što bi dalo 64 za prvo i zadnje računalo, 128 za drugo i 255 za treće (256 bi
+bilo više od maksimuma).  Za sva računala osim virtualnog stroja to daje broj
+skokova jednak 11 ili 12.  DNS pretragom sam utvrdio da su sva tri računala na
+mreži 161.53.0.0/16, koja pripada CARNetu.  11 do 12 skokova mi se čini da je u
+rangu očekivanog broja skokova za datagrame s računala koja su unutar Hrvatske,
+vjerojatno u Zagrebu.  To mi govori da je moja pretpostavka da za početne TTL
+vrijednosti razumna.
+
+Pretraživanjem interneta sam naišao na „defaultne” početne TTL vrijednosti za
+razne operacijske sustave, iz čega mogu uz pomoć dodatnih informacija donijeti
+neke zaključke o operacijksim sustavima pokrenutima na tim računalima.
+
+imunes.net vjerojatno ima početni TTL jednak 64, što se poklapa s vrijednosti
+na virtualnom stroju koji pokreće Ubuntu i izvorima na internetu koji kažu da
+je „defaultna” vrijednost za Linux i FreeBSD jednaka 64.  Dakle, pogađam da je
+taj poslužitelj pokrenut na nekoj distribuciji Linuxa ili na FreeBSD-u.
+
+mail.fer.hr vjerojatno ima početni TTL jednak 128, što se poklapa s
+„defaultnom” vrijednošću na Windowsima, pa zaključujem da je na tom računalu
+pokrenuta neka inačica operacijskog sustava Microsoft Windows Server.
+
+161.53.19.1 vjerojatno ima početni TTL jednak 255.  Izvori na internetu navode
+da je to „defaultna” vrijednost za operacijski sustav Cisco IOS.  Nisam
+pretjerano siguran u to jer navode i druge sustave s tom vrijednošću, ali mi se
+čini da bi Cisco IOS mogao biti najizgledniji.
+
+Pomoću ove vrijednosti ne mogu sa stopostotnom sigurnošću utvrditi o kojem je
+operacijskom sustavu riječ jer više sustava ima istu „defaultnu” vrijednost, a
+moguće je i da je ona naknadno konfigurirana na nekima od navedenih računala.
