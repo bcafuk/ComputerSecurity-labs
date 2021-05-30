@@ -27,7 +27,7 @@ vrijednosti razumna.
 
 Pretraživanjem interneta sam naišao na „defaultne” početne TTL vrijednosti za
 razne operacijske sustave, iz čega mogu uz pomoć dodatnih informacija donijeti
-neke zaključke o operacijksim sustavima pokrenutima na tim računalima.
+neke zaključke o operacijskim sustavima pokrenutima na tim računalima.
 
 imunes.net vjerojatno ima početni TTL jednak 64, što se poklapa s vrijednosti
 na virtualnom stroju koji pokreće Ubuntu i izvorima na internetu koji kažu da
