@@ -11,3 +11,18 @@ nmap -sV -v 192.168.56.101
 nmap -A -v 192.168.56.101
 nmap -sV 192.168.56.101
 nmap -sV localhost
+
+sudo imunes NETWORK.imn
+sudo su
+hcp FW_int.sh FW_int: && himage FW_int ./FW_int.sh stop && himage FW_int ./FW_int.sh start
+hcp FW.sh FW: && himage FW ./FW.sh stop && himage FW ./FW.sh start
+himage FW watch -n 0.5 iptables -L -v -n
+himage FW_int watch -n 0.5 iptables -L -v -n
+./test.sh
+himage pc nmap -n -Pn "-p20-25,53,80,443" 198.51.100.10
+himage pc nmap -n -Pn "-p20-25,53,80,443" 198.51.100.11
+himage int1 nmap -n -Pn "-p20-25,53,80,443" 198.51.100.10
+himage int1 nmap -n -Pn "-p20-25,53,80,443" 198.51.100.11
+himage pc nmap -n -Pn "-p20-25,53,80,443" 10.0.1.10
+himage web nmap -n -Pn "-p20-25,53,80,443" 10.0.1.10
+himage mail-relay nmap -n -Pn "-p20-25,53,80,443" 10.0.1.10

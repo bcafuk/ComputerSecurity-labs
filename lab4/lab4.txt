@@ -85,3 +85,27 @@ neki paketi kasne.
 Pri skeniranju verzija servisa iznutra i izvana nema razlika.  To je zbog toga
 što na poslužitelju ne postoje neki procesi koji su dostupni samo lokalno, već
 samo SSH usluga koja je dostupna i izvana.
+
+
++----------------------------+
+| 3) Konfiguracija vatrozida |
++----------------------------+
+
+1. Pristup s LAN-a na DMZ i Internet: Na FW_int sam omogućio sve NEW pakete s
+   eth1 na eth0.
+2. SSH s int1 na FW_int: Na FW_int na eth1 su odobrene TCP veze s 10.0.1.21 na
+   10.0.1.1, port 22.
+3. Mail-relay ima SMTP pristup na mail: Na eth0 na FW_INT sam odobrio TCP veze
+   s 198.51.100.10 na 10.0.1.10, port 25.
+4. SSH s int1 na FW: Na FW na eth2 su odobrene TCP veze s 10.0.1.21 na
+   198.51.100.1, port 22.
+5. HTTP i HTTPS s Interneta na web: Na FW na eth0 sam dopustio TCP veze na
+   198.51.100.11, vrata 80 i 443.
+6. SMTP s Interneta na mail-relay: Na FW na eth0 sam dopustio TCP veze na
+   198.51.100.10, vrata 25.
+7. DNS pristup na internet s web i mail-relay: Na FW na eth2 sam dopustio TCP i
+   UDP veze s 198.51.100.10 i 198.51.100.11, na port 53
+8. Anti-spoofing pravila za FW_int: Na eth0 sam zabranio veze s 10.0.0.0/8 i
+   198.51.100.2.
+9. Anti-spoofing pravila za FW: Na eth0 sam zabranio veze s 10.0.0.0/8,
+   198.51.100.0/24 i 192.0.2.1.

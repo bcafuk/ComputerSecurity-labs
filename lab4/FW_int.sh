@@ -49,11 +49,11 @@ script_body() {
     #
     iptables -A INPUT -i eth0   -s 198.51.100.2   -m state --state NEW  -j DROP
     #
-    # <--- Dodajte ili modificirajte pravila 
+    iptables -A INPUT -i eth0 -s 10.0.0.0/8 -m state --state NEW -j DROP
     #
     iptables -A FORWARD -i eth0   -s 198.51.100.2   -m state --state NEW  -j DROP
     #
-    # <--- Dodajte ili modificirajte pravila 
+    iptables -A FORWARD -i eth0 -s 10.0.0.0/8 -m state --state NEW -j DROP
     #
 
     # 
@@ -65,7 +65,7 @@ script_body() {
     # 
     echo "... SSH Access to firewall FW_int is permitted only from int1 (on LAN)"
     #
-    # <--- Dodajte pravila 
+    iptables -A INPUT -i eth1 -p TCP --dport 22 -s 10.0.1.21 -d 10.0.1.1 -m state --state NEW -j ACCEPT
     #
 
     #
@@ -77,13 +77,13 @@ script_body() {
     # 
     echo "... permit a mail relay located on DMZ to connect to internal mail server"
     #
-    # <--- Dodajte pravila 
+    iptables -A FORWARD -i eth0 -p TCP --dport 25 -s 198.51.100.10 -d 10.0.1.10 -m state --state NEW -j ACCEPT
     #
 
     # 
     echo "... permit access from LAN to Internet and DMZ"
     #
-    # <--- Dodajte pravila 
+    iptables -A FORWARD -i eth1 -o eth0 -m state --state NEW -j ACCEPT
     #
 }
 

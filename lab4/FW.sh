@@ -32,11 +32,12 @@ script_body() {
     # u primjeru, za "javne" adrese u "Internetu" koristimo TEST-NET[1,2,3] te ih
     # stoga necemo filtrirati anti-spoofing pravilima
     #
-    # <--- Dodajte ili modificirajte pravila 
+    iptables -A INPUT -i eth0 -s 192.0.2.1 -m state --state NEW -j DROP
     #
     iptables -A FORWARD -i eth0   -s 192.0.2.1   -m state --state NEW  -j DROP
     #
-    # <--- Dodajte ili modificirajte pravila 
+    iptables -A FORWARD -i eth0 -s 198.51.100.0/24 -m state --state NEW  -j DROP
+    iptables -A FORWARD -i eth0 -s 10.0.0.0/8 -m state --state NEW  -j DROP
     #
 
     # 
@@ -48,7 +49,7 @@ script_body() {
     # 
     echo "... ssh access to firewall only from int1"
     # 
-    # <--- Dodajte pravila 
+    iptables -A INPUT -i eth2 -p TCP --dport 22 -s 10.0.1.21 -d 198.51.100.1 -m state --state NEW -j ACCEPT
     #
 
     # 
@@ -72,19 +73,22 @@ script_body() {
     # 
     echo "... mail relay on DMZ can accept connections from hosts on the Internet"
     #
-    # <--- Dodajte pravila 
+    iptables -A FORWARD -i eth0 -p TCP --dport 25 -d 198.51.100.10 -m state --state NEW -j ACCEPT
     #
 
     # 
     echo "... mail relay needs DNS and can connect to mail servers on the Internet"
     #
-    # <--- Dodajte pravila 
+    iptables -A FORWARD -i eth2 -p TCP --dport 53 -s 198.51.100.10 -m state --state NEW -j ACCEPT
+    iptables -A FORWARD -i eth2 -p UDP --dport 53 -s 198.51.100.10 -m state --state NEW -j ACCEPT
+    iptables -A FORWARD -i eth2 -p TCP --dport 53 -s 198.51.100.11 -m state --state NEW -j ACCEPT
+    iptables -A FORWARD -i eth2 -p UDP --dport 53 -s 198.51.100.11 -m state --state NEW -j ACCEPT
     #
 
     # 
     echo "... web server on DMZ must be reachable from the Internet"
     #
-    # <--- Dodajte pravila 
+    iptables -A FORWARD -i eth0 -p TCP -m multiport --dports 80,443 -d 198.51.100.11 -m state --state NEW -j ACCEPT
     #
 
     echo "... SSH Access to mail-relay (on DMZ) is permitted only on port 1111"
