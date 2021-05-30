@@ -54,9 +54,8 @@ moguće je i da je ona naknadno konfigurirana na nekima od navedenih računala.
 
 TCP connect scan na virtualnom stroju nije prouzročio vidljivu promjenu ispisa.
 Nmap je u potpunosti uspostavio TCP vezu („three-way handshake”), pa ju
-raskinuo.  Nakon što je zatvorena, veza više nije vidljiva u alatu netstat.
-Zato što je veza uspostavljena i raskinuta unutar 0,5 s se uopće nije pojavila
-u netstatu.
+raskinuo koristeći TCP RST paket (ne FIN).  Zato što je veza uspostavljena i
+raskinuta unutar 0,5 sekundi, uopće se nije pojavila u netstatu.
 
 Skeniranje UDP portova nije prouzročilo nikakvu promjenu u ispisu.  Na
 poslužitelju ne postoje procesi koji slušaju na UDP-u, pa se nije imalo što
