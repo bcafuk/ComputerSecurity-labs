@@ -26,3 +26,11 @@ himage int1 nmap -n -Pn "-p20-25,53,80,443" 198.51.100.11
 himage pc nmap -n -Pn "-p20-25,53,80,443" 10.0.1.10
 himage web nmap -n -Pn "-p20-25,53,80,443" 10.0.1.10
 himage mail-relay nmap -n -Pn "-p20-25,53,80,443" 10.0.1.10
+
+nano /etc/ssh/sshd_config
+service ssh restart
+ssh-keygen -t rsa
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@198.51.100.10 -p 1111
+ssh root@198.51.100.10 -p 1111
+ssh-copy-id -i ~/.ssh/id_rsa.pub -o ProxyJump=198.51.100.10:1111 root@10.0.1.10 -p 2222
+ssh -J root@198.51.100.10:1111 root@10.0.1.10 -p 2222

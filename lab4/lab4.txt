@@ -109,3 +109,33 @@ samo SSH usluga koja je dostupna i izvana.
    198.51.100.2.
 9. Anti-spoofing pravila za FW: Na eth0 sam zabranio veze s 10.0.0.0/8,
    198.51.100.0/24 i 192.0.2.1.
+
+
++---------------------------------------------------------+
+| 4) Konfiguracija ssh poslužitelja i „jump host” pristup |
++---------------------------------------------------------+
+
+Na FW sam dopustio pristup portu 1111 na mail-relayu s Interneta.  Na FW_int
+sam dopustio pristup portu 2222 na mailu iz DMZ-a.
+
+Na SSH poslužiteljima sam:
+ * promijenio port na 1111, odnosno 2222
+ * „PermitRootLogin” privremeno postavio na „yes”
+ * „PubkeyAuthentication” postavio na „yes”
+ * „PasswordAuthentication” privremeno postavio na „yes”
+
+Na računalu pc sam izgenerirao ključeve.  Kopirao sam javni ključ na
+mail-relay.  Provjerio sam da kad se spajam na njega se ne koristi lozinka, već
+ključevi.  Javni ključ sam kopirao na mail.  Isto sam provjerio i za njega
+pomoću jump hosta.
+
+Na SSH poslužiteljima sam:
+ * „PermitRootLogin” postavio na „prohibit-password”
+ * „PasswordAuthentication” postavio na „no”
+
+Opcije kojima bih bolje zaštitio poslužitelje su:
+ * isključivanje prijave pomoću lozinke (PasswordAuthentication) i uključivanje
+   prijave pomoću ključa (PubkeyAuthentication), jer je tajni ključ puno teže
+	 razbiti grubom silom nego lozinku
+ * isključivanje prijave root korisnika (PermitRootLogin), kako bih
+   ograničio štetu koju napadač može uzrokovati

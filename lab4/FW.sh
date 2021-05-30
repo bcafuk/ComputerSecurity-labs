@@ -93,7 +93,7 @@ script_body() {
 
     echo "... SSH Access to mail-relay (on DMZ) is permitted only on port 1111"
     #
-    # <--- Dodajte pravila
+    iptables -A FORWARD -i eth0 -p TCP --dport 1111 -d 198.51.100.10 -m state --state NEW -j ACCEPT
     #
 
     # 
