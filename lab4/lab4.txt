@@ -135,6 +135,6 @@ Na SSH poslužiteljima sam:
 Opcije kojima bih bolje zaštitio poslužitelje su:
  * isključivanje prijave pomoću lozinke (PasswordAuthentication) i uključivanje
    prijave pomoću ključa (PubkeyAuthentication), jer je tajni ključ puno teže
-	 razbiti grubom silom nego lozinku
+   razbiti grubom silom nego lozinku
  * isključivanje prijave root korisnika (PermitRootLogin), kako bih
    ograničio štetu koju napadač može uzrokovati
